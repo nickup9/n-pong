@@ -1,0 +1,33 @@
+local XVALS = {100, 120, 120, 100}
+local YVALS = {100, 100, 170, 170}
+
+function love.draw()
+	local vertices = {xvals[1], yvals[1], xvals[2], yvals[2], xvals[3], yvals[3], xvals[4], yvals[4]}
+		love.graphics.polygon('fill', vertices)
+end
+
+function love.keypressed(key)
+	if key == 'up' then
+		for i = 1, #yvals do
+			yvals[i] = yvals[i] - 5
+		end
+	end
+	if key == 'down'then
+		for i = 1, #yvals do
+			yvals[i] = yvals[i] + 5
+		end
+	end
+	if key == 'left'then
+		for i = 1, #xvals do
+			xvals[i] = xvals[i] -5
+		end
+	end
+	if key == 'right'then
+		for i = 1, #xvals do
+			xvals[i] = xvals[i] + 5
+		end
+	end
+end
+
+
+
