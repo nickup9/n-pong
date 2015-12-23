@@ -26,7 +26,7 @@ love.graphics.setFont(font)
 
 local playerOneScore = 0
 local playerTwoScore = 0
-local winStatus = ""
+local winner = ""
 
 local paused = false
 function love.keypressed(key)
@@ -51,7 +51,7 @@ function love.draw()
 	love.graphics.polygon('fill', puckVert)
 	love.graphics.print(playerOneScore, 200, 50)
 	love.graphics.print(playerTwoScore, 300, 50)
-	love.graphics.print(winStatus, 250, 250)
+	love.graphics.print(winner, 250, 250)
 	if paused then return end
 	keyBinds()
 	puckLogic()
@@ -156,20 +156,20 @@ function love.update(dt)
 			end
 		end
 		if puckXCoords[2] < 0 then
-			winStatus = "Player Two scored!"
+			winner = "Player Two scored!"
 			playerTwoScore = playerTwoScore + 1
 			resetGameState()
 			love.timer.sleep(3)
 			print("Go!")
-			winStatus = ""
+			winner = ""
 		end
 		if puckXCoords[1] > 500 then
-			winStatus = "Player One scored!"
+			winner = "Player One scored!"
 			playerOneScore = playerOneScore + 1
 			resetGameState()
 			love.timer.sleep(3)
 			print("Go!")
-			winStatus = ""
+			winner = ""
 		end
 		if puckYCoords[1] < 0 then
 			diagSpeed = diagSpeed*-1
