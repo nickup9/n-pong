@@ -1,20 +1,3 @@
---Notes: Functional. Work on aesthetics and the like.
---Should move text into the game proper. Will need to find how to pause the game without freezing the process using timer.sleep().
---Text refuses to print.
---12/9
-
---Version 151211
---Made by Nicholas Shpetner to learn Love2D
-
---@151119: Edited code so a point will be lost when the puck reaches the border, and a puck will bounce even if it is "inside" a paddle.
---@151124: Added require() for config, it works, hurrah. Does absolutly nothing.
---@151125: Fixed puck == border. Began work on pause function.
---@15121: Pause works. Need to add text in game.
---@15129: Text logic is not called being moved to love. Working on that.
---@151211: Made it so that diag speed changes based on where on the paddle it hit.
-
-
-
 package.loaded.config = nil
 local config = require("config")
 config.checkPlayers()
@@ -24,14 +7,13 @@ if test == true then
 	print("Borders edited")
 end
 
---note: graphics.polygon draws verts clockwise.
 
 local paddleOneX = {0, 20, 20, 0}
 local paddleOneY = {220, 220, 310, 310}
 
 local paddleTwoX = {480, 500, 500, 480}
 local paddleTwoY = {220, 220, 310, 310}
---mid 285
+
 local puckX = {225, 250, 250, 225}
 local puckY = {265, 265, 285, 285}
 
@@ -45,11 +27,8 @@ love.graphics.setFont(font)
 local playerOne = 0
 local playerTwo = 0
 local winCheck = 0
-local winStatus = "Nothing!"
---0 = None, defualt value
---1 = Player two
---2 = Player one.
---Yes, that's bad design. No, I'm not changing it.
+local winStatus = ""
+
 local paused = false
 function love.keypressed(key)
   if key == "p" then
@@ -84,7 +63,6 @@ end
 local pauseTimer = 10
 function love.update(dt)
 	function keyBinds()
-		--keyboard vars
 		local up = love.keyboard.isDown('up')
 		local down = love.keyboard.isDown('down')
 		local w = love.keyboard.isDown('w')
@@ -99,7 +77,6 @@ function love.update(dt)
 
 
 
-		--Paddle one bindings
 		if w and paddleOneY[1] > 0 and paddleOneY[2] > 0 then
 			for i = 1, #paddleOneY do
 				paddleOneY[i] = paddleOneY[i] - 5
@@ -111,7 +88,6 @@ function love.update(dt)
 			end
 		end
 		
-		--Paddle two bindings
 		if up and paddleTwoY[1] > 0 and paddleTwoY[2] > 0 then
 			for i = 1, #paddleTwoY do
 				paddleTwoY[i] = paddleTwoY[i] - 5
@@ -124,7 +100,6 @@ function love.update(dt)
 		end
 	end
 	function puckLogic()
-		--Why am I making pong? Cause puck logic!
 		if moveLeft == false and moveRight == false then
 			moveLeft = true
 			print("Good luck Have fun")
@@ -182,7 +157,6 @@ function love.update(dt)
 				end
 			end
 		end
-		--score and border logic
 		if puckX[2] < 0 then
 			local time = 0;
 			time = time + dt
@@ -218,17 +192,14 @@ function love.update(dt)
 	end
 	function movement()
 		if moveLeft == true then
-			--print("Debug: moving Left")
 			for i = 1, #puckX do
 				puckX[i] = puckX[i] - 5
 			end
 			for i=1, #puckY do
 				puckY[i] = puckY[i] + diagSpeed
-				--print("debug: worked")
 			end
 		end
 		if moveRight == true then
-			--print("Debug: moving Right")
 			for i = 1, #puckX do
 				puckX[i] = puckX[i] + 5
 			end
