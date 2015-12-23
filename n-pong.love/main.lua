@@ -8,14 +8,14 @@ if test == true then
 end
 
 
-local paddleOneX = {0, 20, 20, 0}
-local paddleOneY = {220, 220, 310, 310}
+local paddleOneXCoords = {0, 20, 20, 0}
+local paddleOneYCoords = {220, 220, 310, 310}
 
-local paddleTwoX = {480, 500, 500, 480}
-local paddleTwoY = {220, 220, 310, 310}
+local paddleTwoXCoords = {480, 500, 500, 480}
+local paddleTwoYCoords = {220, 220, 310, 310}
 
-local puckX = {225, 250, 250, 225}
-local puckY = {265, 265, 285, 285}
+local puckXCoords = {225, 250, 250, 225}
+local puckYCoords = {265, 265, 285, 285}
 
 local moveLeft = false
 local moveRight = false
@@ -24,8 +24,8 @@ local diagSpeed = 0
 font = love.graphics.newFont(14)
 love.graphics.setFont(font)
 
-local playerOne = 0
-local playerTwo = 0
+local playerOneScore = 0
+local playerTwoScore = 0
 local winCheck = 0
 local winStatus = ""
 
@@ -44,14 +44,14 @@ end
 
 
 function love.draw()
-	local vertices = {paddleOneX[1], paddleOneY[1], paddleOneX[2], paddleOneY[2], paddleOneX[3], paddleOneY[3], paddleOneX[4], paddleOneY[4]}
-	local verticesTwo = {paddleTwoX[1], paddleTwoY[1], paddleTwoX[2], paddleTwoY[2], paddleTwoX[3], paddleTwoY[3], paddleTwoX[4], paddleTwoY[4]}
-	local puckVert = {puckX[1], puckY[1], puckX[2], puckY[2], puckX[3], puckY[3], puckX[4], puckY[4]}
-	love.graphics.polygon('fill', vertices)
-	love.graphics.polygon('fill', verticesTwo)
+	local paddleOneVertices = {paddleOneXCoords[1], paddleOneYCoords[1], paddleOneXCoords[2], paddleOneYCoords[2], paddleOneXCoords[3], paddleOneYCoords[3], paddleOneXCoords[4], paddleOneYCoords[4]}
+	local paddleTwoVertices = {paddleTwoXCoords[1], paddleTwoYCoords[1], paddleTwoXCoords[2], paddleTwoYCoords[2], paddleTwoXCoords[3], paddleTwoYCoords[3], paddleTwoXCoords[4], paddleTwoYCoords[4]}
+	local puckVert = {puckXCoords[1], puckYCoords[1], puckXCoords[2], puckYCoords[2], puckXCoords[3], puckYCoords[3], puckXCoords[4], puckYCoords[4]}
+	love.graphics.polygon('fill', paddleOneVertices)
+	love.graphics.polygon('fill', paddleTwoVertices)
 	love.graphics.polygon('fill', puckVert)
-	love.graphics.print(playerOne, 200, 50)
-	love.graphics.print(playerTwo, 300, 50)
+	love.graphics.print(playerOneScore, 200, 50)
+	love.graphics.print(playerTwoScore, 300, 50)
 	love.graphics.print(winStatus, 250, 250)
 	if paused then return end
 	keyBinds()
@@ -77,25 +77,25 @@ function love.update(dt)
 
 
 
-		if w and paddleOneY[1] > 0 and paddleOneY[2] > 0 then
-			for i = 1, #paddleOneY do
-				paddleOneY[i] = paddleOneY[i] - 5
+		if w and paddleOneYCoords[1] > 0 and paddleOneYCoords[2] > 0 then
+			for i = 1, #paddleOneYCoords do
+				paddleOneYCoords[i] = paddleOneYCoords[i] - 5
 			end
 		end
-		if s and paddleOneY[3] < 500 and paddleOneY[4] < 500 then
-			for i = 1, #paddleOneY do
-				paddleOneY[i] = paddleOneY[i] + 5
+		if s and paddleOneYCoords[3] < 500 and paddleOneYCoords[4] < 500 then
+			for i = 1, #paddleOneYCoords do
+				paddleOneYCoords[i] = paddleOneYCoords[i] + 5
 			end
 		end
 		
-		if up and paddleTwoY[1] > 0 and paddleTwoY[2] > 0 then
-			for i = 1, #paddleTwoY do
-				paddleTwoY[i] = paddleTwoY[i] - 5
+		if up and paddleTwoYCoords[1] > 0 and paddleTwoYCoords[2] > 0 then
+			for i = 1, #paddleTwoYCoords do
+				paddleTwoYCoords[i] = paddleTwoYCoords[i] - 5
 			end
 		end
-		if down and paddleTwoY[3] < 500 and paddleTwoY[4] < 500 then
-			for i = 1, #paddleTwoY do
-				paddleTwoY[i] = paddleTwoY[i] + 5
+		if down and paddleTwoYCoords[3] < 500 and paddleTwoYCoords[4] < 500 then
+			for i = 1, #paddleTwoYCoords do
+				paddleTwoYCoords[i] = paddleTwoYCoords[i] + 5
 			end
 		end
 	end
@@ -105,8 +105,8 @@ function love.update(dt)
 			print("Good luck Have fun")
 			print("Hit q to quit")
 		end
-		if puckX[1] <= 20 and puckX[4] <= 20 then
-			if puckY[1] >= paddleOneY[1] and puckY[4] <= paddleOneY[4] then
+		if puckXCoords[1] <= 20 and puckXCoords[4] <= 20 then
+			if puckYCoords[1] >= paddleOneYCoords[1] and puckYCoords[4] <= paddleOneYCoords[4] then
 				moveLeft = false
 				moveRight = true
 				if diagSpeed > 0 then
@@ -116,23 +116,23 @@ function love.update(dt)
 					diagSpeed = diagSpeed + 2
 				end
 			end
-			if puckY[1] >= paddleOneY[1] and puckY[1] <= paddleOneY[3] then
-				if puckY[3] >= paddleOneY[3] then
+			if puckYCoords[1] >= paddleOneYCoords[1] and puckYCoords[1] <= paddleOneYCoords[3] then
+				if puckYCoords[3] >= paddleOneYCoords[3] then
 					moveLeft = false 
 					moveRight = true
-					diagSpeed = diagSpeed + 5
+					CoordsdiagSpeed = diagSpeed + 5
 				end
 			end
-			if puckY[3] <= paddleOneY[3] and puckY[3] >= paddleOneY[1] then
-				if puckY[1] <= paddleOneY[1] then
+			if puckYCoords[3] <= paddleOneYCoords[3] and puckYCoords[3] >= paddleOneYCoords[1] then
+				if puckYCoords[1] <= paddleOneYCoords[1] then
 					moveLeft = false
 					moveRight = true
 					diagSpeed = diagSpeed - 5
 				end
 			end
 		end
-		if puckX[2] >= 480 and puckX[3] >= 480 then
-			if puckY[2] > paddleTwoY[2] and puckY[3] < paddleTwoY[3] then
+		if puckXCoords[2] >= 480 and puckXCoords[3] >= 480 then
+			if puckYCoords[2] > paddleTwoYCoords[2] and puckYCoords[3] < paddleTwoYCoords[3] then
 				moveRight = false
 				moveLeft = true
 				if diagSpeed > 0 then
@@ -142,97 +142,94 @@ function love.update(dt)
 					diagSpeed = diagSpeed + 2
 				end
 			end
-			if puckY[1] >= paddleTwoY[1] - 15 and puckY[1] <= paddleTwoY[3] then
-				if puckY[3] >= paddleTwoY[3] then 
+			if puckYCoords[1] >= paddleTwoYCoords[1] - 15 and puckYCoords[1] <= paddleTwoYCoords[3] then
+				if puckYCoords[3] >= paddleTwoYCoords[3] then 
 					moveRight = false
 					moveLeft = true
 					diagSpeed = diagSpeed + 5
 				end
 			end
-			if puckY[3] <= paddleTwoY[3] + 15 and puckY[3] >= paddleTwoY[1] then
-				if puckY[1] <= paddleTwoY[1] then
+			if puckYCoords[3] <= paddleTwoYCoords[3] + 15 and puckYCoords[3] >= paddleTwoYCoords[1] then
+				if puckYCoords[1] <= paddleTwoYCoords[1] then
 					moveRight = false
 					moveLeft = true
 					diagSpeed = diagSpeed - 5
 				end
 			end
 		end
-		if puckX[2] < 0 then
+		if puckXCoords[2] < 0 then
 			local time = 0;
 			time = time + dt
-			playerTwo = playerTwo + 1
+			playerTwoScore = playerTwoScore + 1
 			winCheck = 1
-			returnDefaults()
+			resetGameState()
 			love.timer.sleep(3)
 			print("Go!")
 			winCheck = 0
 		end
-		if puckX[1] > 500 then
-			playerOne = playerOne + 1
+		if puckXCoords[1] > 500 then
+			playerOneScore = playerOneScore + 1
 			winCheck = 2
-			returnDefaults()
+			resetGameState()
 			love.timer.sleep(3)
 			print("Go!")
 			winCheck = 0
 		end
-		if puckY[1] < 0 then
+		if puckYCoords[1] < 0 then
 			diagSpeed = diagSpeed*-1
 		end
-		if puckY[3] > 500 then
+		if puckYCoords[3] > 500 then
 			diagSpeed = diagSpeed*-1
 		end
-		if playerOne == 11 then
+		if playerOneScore == 11 then
 			print("Player One has won!")
 			love.event.quit()
 		end
-		if playerTwo == 11 then
+		if playerTwoScore == 11 then
 			print("Player Two has won!")
 			love.event.quit()
 		end
 	end
 	function movement()
 		if moveLeft == true then
-			for i = 1, #puckX do
-				puckX[i] = puckX[i] - 5
+			for i = 1, #puckXCoords do
+				puckXCoords[i] = puckXCoords[i] - 5
 			end
-			for i=1, #puckY do
-				puckY[i] = puckY[i] + diagSpeed
+			for i=1, #puckYCoords do
+				puckYCoords[i] = puckYCoords[i] + diagSpeed
 			end
 		end
 		if moveRight == true then
-			for i = 1, #puckX do
-				puckX[i] = puckX[i] + 5
+			for i = 1, #puckXCoords do
+				puckXCoords[i] = puckXCoords[i] + 5
 			end
-			for i=1,#puckY do
-				puckY[i] = puckY[i] + diagSpeed
+			for i=1,#puckYCoords do
+				puckYCoords[i] = puckYCoords[i] + diagSpeed
 			end
 		end
 	end
 	function textLogic()
 		if winCheck == 1 then
 			winStatus = "Player Two scored!"
-			print("Debug: textLogic called")
 		end
 		if winCheck == 2 then
 			winStatus = "Player One scored!"
-			print("Debug: textLogic called")
 		end
 		if winCheck == 0 then
 			winStatus = ""
-			print("Debug: textLogic called")
 		end
 	end
 end
 
 
 
-function returnDefaults()
-	paddleOneX = {0, 20, 20, 0}
-	paddleOneY = {220, 220, 310, 310}
-	paddleTwoX = {480, 500, 500, 480}
-	paddleTwoY = {220, 220, 310, 310}
-	puckX = {225, 250, 250, 225}
-	puckY = {265, 265, 285, 285}
+function resetGameState()
+	paddleOneXCoords = {0, 20, 20, 0}
+	paddleOneYCoords = {220, 220, 310, 310}
+	paddleTwoXCoords = {480, 500, 500, 480}
+	paddleTwoYCoords = {220, 220, 310, 310}
+	puckXCoords = {225, 250, 250, 225}
+	puckYCoords = {265, 265, 285, 285}
 	moveRight = false
 	moveLeft = true
 	direction = false
