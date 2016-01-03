@@ -58,7 +58,6 @@ function love.draw()
 	movement()
 end
 
-local pauseTimer = 10
 function love.update(dt)
 	function keyBinds()
 		local up = love.keyboard.isDown('up')
@@ -118,7 +117,7 @@ function love.update(dt)
 				if puckYCoords[3] >= paddleOneYCoords[3] then
 					moveLeft = false 
 					moveRight = true
-					CoordsdiagSpeed = diagSpeed + 5
+					diagSpeed = diagSpeed + 5
 				end
 			end
 			if puckYCoords[3] <= paddleOneYCoords[3] and puckYCoords[3] >= paddleOneYCoords[1] then
@@ -188,19 +187,25 @@ function love.update(dt)
 	end
 	function movement()
 		if moveLeft == true then
-			for i = 1, #puckXCoords do
-				puckXCoords[i] = puckXCoords[i] - 5
-			end
-			for i=1, #puckYCoords do
-				puckYCoords[i] = puckYCoords[i] + diagSpeed
+			if dt > .0001 then
+				for i = 1, #puckXCoords do
+					puckXCoords[i] = puckXCoords[i] - 5
+				end
+				for i=1, #puckYCoords do
+					puckYCoords[i] = puckYCoords[i] + diagSpeed
+				end
+				dt = 0
 			end
 		end
 		if moveRight == true then
-			for i = 1, #puckXCoords do
-				puckXCoords[i] = puckXCoords[i] + 5
-			end
-			for i=1,#puckYCoords do
-				puckYCoords[i] = puckYCoords[i] + diagSpeed
+			if dt > .0001 then
+				for i = 1, #puckXCoords do
+					puckXCoords[i] = puckXCoords[i] + 5
+				end
+				for i=1,#puckYCoords do
+					puckYCoords[i] = puckYCoords[i] + diagSpeed
+				end
+				dt = 0
 			end
 		end
 	end
