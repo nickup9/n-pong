@@ -55,7 +55,7 @@ function love.draw()
 	love.graphics.print(winner, 250, 250)
 	if paused then return end
 	if loading > 0 then
-       love.graphics.print("Starting in 3 seconds!", 250, 250)
+       love.graphics.print("Starting in 3 seconds!", 190, 240)
     end
     if loading < 0 then
 		keyBinds()
