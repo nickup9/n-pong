@@ -29,6 +29,7 @@ local playerTwoScore = 0
 local winner = ""
 
 local paused = false
+local loading = 0
 function love.keypressed(key)
   if key == "p" then
   	if paused == false then
@@ -53,12 +54,22 @@ function love.draw()
 	love.graphics.print(playerTwoScore, 300, 50)
 	love.graphics.print(winner, 250, 250)
 	if paused then return end
-	keyBinds()
-	puckLogic()
-	movement()
+	if loading > 0 then
+       love.graphics.print("Starting in 3 seconds!", 250, 250)
+    end
+    if loading < 0 then
+		keyBinds()
+		puckLogic()
+		movement()
+	end
 end
 
 function love.update(dt)
+	if loading > 0 then
+       loading = loading - dt
+    elseif loading == 0 then
+       loading = -1
+    end
 	function keyBinds()
 		local up = love.keyboard.isDown('up')
 		local down = love.keyboard.isDown('down')
@@ -158,7 +169,7 @@ function love.update(dt)
 			winner = "Player Two scored!"
 			playerTwoScore = playerTwoScore + 1
 			resetGameState()
-			love.timer.sleep(3)
+			loading = 3
 			print("Go!")
 			winner = ""
 		end
@@ -166,7 +177,7 @@ function love.update(dt)
 			winner = "Player One scored!"
 			playerOneScore = playerOneScore + 1
 			resetGameState()
-			love.timer.sleep(3)
+			loading = 3
 			print("Go!")
 			winner = ""
 		end
